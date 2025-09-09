@@ -1,0 +1,118 @@
+---
+// GitHub Sponsors component
+const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
+
+interface Sponsor {
+  id: string;
+  login: string;
+  name?: string;
+  avatarUrl: string;
+  websiteUrl?: string;
+}
+
+let sponsors: Sponsor[] = [];
+let hasError = false;
+
+if (GITHUB_TOKEN) {
+  try {
+    const query = `
+      query {
+        user(login: "dylan") {
+          sponsors(first: 20) {
+            nodes {
+              id
+              login
+              name
+              avatarUrl
+              websiteUrl
+            }
+          }
+        }
+      }
+    `;
+
+    const response = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${GITHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      sponsors = data.data?.user?.sponsors?.nodes || [];
+    } else {
+      hasError = true;
+    }
+  } catch (error) {
+    console.error('Error fetching sponsors:', error);
+    hasError = true;
+  }
+}
+---
+
+<section class="py-8">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+        Sponsors ({sponsors.length})
+      </h2>
+      <a 
+        href="https://github.com/sponsors/dylan" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm"
+      >
+        Become a sponsor →
+      </a>
+    </div>
+
+    {GITHUB_TOKEN && !hasError && sponsors.length > 0 ? (
+      <div class="space-y-4">
+        {sponsors.map((sponsor) => (
+          <div class="flex items-center space-x-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+            <img
+              src={sponsor.avatarUrl}
+              alt={sponsor.name || sponsor.login}
+              class="w-12 h-12 rounded-full"
+            />
+            <div class="flex-1">
+              <h3 class="font-medium text-gray-900 dark:text-white">
+                {sponsor.name || sponsor.login}
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                @{sponsor.login}
+              </p>
+            </div>
+          </div>
+        ))}
+        <div class="text-center pt-4">
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            Thank you to all my amazing sponsors! ❤️
+          </p>
+        </div>
+      </div>
+    ) : (
+      <div class="text-center py-8">
+        <div class="inline-flex items-center px-6 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+          <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="text-blue-800 dark:text-blue-200 font-medium">
+            Become a sponsor on 
+            <a 
+              href="https://github.com/sponsors/dylan" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="underline hover:no-underline ml-1"
+            >
+              GitHub Sponsors
+            </a>
+          </span>
+        </div>
+      </div>
+    )}
+  </div>
+</section>

@@ -1,0 +1,184 @@
+---
+const GRID_COLS = 50;
+const GRID_ROWS = 50;
+const CELL_SIZE = 40;
+const HOVER_SCALE = 1.5;
+const ANIMATION_DURATION = '0.3s';
+const GLOW_COLOR = 'rgba(99, 102, 241, 0.1)';
+const GLOW_COLOR_DARK = 'rgba(129, 140, 248, 0.1)';
+---
+<div class="fixed inset-0 overflow-hidden" style={{
+  zIndex: '0',
+  pointerEvents: 'none'
+}}>
+  <div class="grid-background" style={{
+    display: 'grid',
+    gridTemplateColumns: `repeat(${GRID_COLS}, ${CELL_SIZE}px)`,
+    gridTemplateRows: `repeat(${GRID_ROWS}, ${CELL_SIZE}px)`,
+    width: '100vw',
+    height: '100vh',
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    opacity: 0.3,
+    zIndex: '0'
+  }}>
+    {Array.from({ length: GRID_COLS * GRID_ROWS }, (_, i) => (
+      <div
+        key={i}
+        class="grid-cell"
+        style={{
+          width: `${CELL_SIZE}px`,
+          height: `${CELL_SIZE}px`,
+          border: '1px solid rgba(99, 102, 241, 0.1)',
+          transition: `all ${ANIMATION_DURATION} ease-out`,
+          cursor: 'pointer',
+          pointerEvents: 'auto'
+        }}
+      />
+    ))}
+  </div>
+</div>
+
+<script>
+  // Grid background interaction
+  let gridCells = [];
+  let gridBackground = null;
+  
+  // Function to calculate distance between two points
+  function getDistance(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+  }
+  
+  // Initialize grid cells
+  function initializeGrid() {
+    gridCells = document.querySelectorAll('.grid-cell');
+    gridBackground = document.querySelector('.grid-background');
+  }
+  
+  // Handle mouse move
+  function handleMouseMove(e) {
+    if (!gridCells.length) return;
+    
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    
+    gridCells.forEach(cell => {
+      const rect = cell.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      // Calculate distance from mouse to cell center
+      const distance = getDistance(mouseX, mouseY, centerX, centerY);
+      
+      // Apply hover effect if mouse is close to the cell
+      if (distance < 80) {
+        const scale = Math.max(1, 1.5 - (distance / 80) * 0.5);
+        const opacity = Math.max(0.1, 1 - (distance / 80) * 0.9);
+        
+        cell.style.transform = `scale(${scale})`;
+        cell.style.backgroundColor = document.documentElement.classList.contains('dark') 
+          ? 'rgba(129, 140, 248, 0.15)' 
+          : 'rgba(99, 102, 241, 0.15)';
+        cell.style.borderColor = document.documentElement.classList.contains('dark')
+          ? 'rgba(129, 140, 248, 0.3)'
+          : 'rgba(99, 102, 241, 0.3)';
+        cell.style.boxShadow = document.documentElement.classList.contains('dark')
+          ? `0 0 ${15 * opacity}px rgba(129, 140, 248, ${opacity * 0.4})`
+          : `0 0 ${15 * opacity}px rgba(99, 102, 241, ${opacity * 0.4})`;
+        cell.style.zIndex = '1';
+      } else {
+        // Reset to default state
+        cell.style.transform = 'scale(1)';
+        cell.style.backgroundColor = 'transparent';
+        cell.style.borderColor = document.documentElement.classList.contains('dark')
+          ? 'rgba(129, 140, 248, 0.05)'
+          : 'rgba(99, 102, 241, 0.05)';
+        cell.style.boxShadow = 'none';
+        cell.style.zIndex = '0';
+      }
+    });
+  }
+  
+  // Initialize on load
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeGrid();
+    document.addEventListener('mousemove', handleMouseMove);
+  });
+  
+  // Re-initialize when DOM changes (for SPA navigation)
+  const observer = new MutationObserver(() => {
+    initializeGrid();
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+  
+  // Handle theme changes
+  const themeObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        // Update grid colors based on theme
+        const isDark = document.documentElement.classList.contains('dark');
+        gridCells.forEach(cell => {
+          if (cell.style.backgroundColor !== 'transparent') {
+            cell.style.backgroundColor = isDark 
+              ? 'rgba(129, 140, 248, 0.15)' 
+              : 'rgba(99, 102, 241, 0.15)';
+            cell.style.borderColor = isDark
+              ? 'rgba(129, 140, 248, 0.3)'
+              : 'rgba(99, 102, 241, 0.3)';
+          }
+        });
+      }
+    });
+  });
+  
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+  
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    observer.disconnect();
+    themeObserver.disconnect();
+  });
+</script>
+
+<style>
+  .grid-cell {
+    position: relative;
+    border-radius: 2px;
+    transition: all 0.3s ease-out;
+    pointer-events: auto;
+    z-index: 0;
+  }
+  
+  .grid-cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    background: radial-gradient(circle, transparent 0%, transparent 100%);
+    pointer-events: none;
+  }
+  
+  .grid-background {
+    will-change: transform;
+  }
+  
+  @media (max-width: 768px) {
+    .grid-background {
+      transform: scale(0.8);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .grid-background {
+      transform: scale(0.6);
+    }
+  }
+</style>
