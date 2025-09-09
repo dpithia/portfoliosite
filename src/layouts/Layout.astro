@@ -5,6 +5,7 @@ export interface Props {
 }
 
 import GridBackground from '../components/GridBackground.astro';
+import ContactModal from '../components/ContactModal.astro';
 
 const { title, description = "Modern Portfolio - Built with Astro" } = Astro.props;
 ---
@@ -73,6 +74,7 @@ const { title, description = "Modern Portfolio - Built with Astro" } = Astro.pro
       <div class="relative z-10">
         <slot />
       </div>
+      <ContactModal />
     </div>
     
     <script>

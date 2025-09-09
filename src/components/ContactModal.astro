@@ -1,0 +1,268 @@
+---
+// Check if we're in a browser environment before using window
+const isBrowser = typeof window !== 'undefined';
+---
+
+<div id="contact-modal" class="fixed inset-0 z-50 hidden">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="modal-backdrop"></div>
+  
+  <!-- Modal Content -->
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Get in Touch</h3>
+        <button id="close-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+          <svg class= "w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Form -->
+      <form id="contact-form" class="p-6">
+        <div class="space-y-4">
+          <!-- Name -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Name
+            </label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+              placeholder="Your name"
+            />
+          </div>
+          
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Email
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+              placeholder="your.email@example.com"
+            />
+          </div>
+          
+          <!-- Subject -->
+          <div>
+            <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Subject
+            </label>
+            <input 
+              type="text" 
+              id="subject" 
+              name="subject" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+              placeholder="What's this about?"
+            />
+          </div>
+          
+          <!-- Message -->
+          <div>
+            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Message
+            </label>
+            <textarea 
+              id="message" 
+              name="message" 
+              rows="4" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none"
+              placeholder="Tell me about your project or opportunity..."
+            ></textarea>
+          </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="mt-6 flex items-center justify-between">
+          <button 
+            type="button"
+            id="cancel-btn"
+            class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit"
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          >
+            Send Message
+          </button>
+        </div>
+      </form>
+      
+      <!-- Success Message -->
+      <div id="success-message" class="hidden p-6 text-center">
+        <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Message Sent!</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">
+          Thanks for reaching out! I'll get back to you as soon as possible.
+        </p>
+        <button 
+          id="close-success"
+          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Check if we're in a browser environment
+  const isBrowser = typeof window !== 'undefined';
+  
+  // Modal functionality
+  const modal = document.getElementById('contact-modal');
+  const modalContent = document.getElementById('modal-content');
+  const backdrop = document.getElementById('modal-backdrop');
+  const closeModal = document.getElementById('close-modal');
+  const cancelBtn = document.getElementById('cancel-btn');
+  const contactForm = document.getElementById('contact-form');
+  const successMessage = document.getElementById('success-message');
+  const closeSuccess = document.getElementById('close-success');
+  
+  // Function to open modal
+  function openModal() {
+    modal.classList.remove('hidden');
+    // Trigger animation
+    setTimeout(() => {
+      modalContent.classList.remove('scale-95', 'opacity-0');
+      modalContent.classList.add('scale-100', 'opacity-100');
+    }, 10);
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+  }
+  
+  // Function to close modal
+  function closeModalFunc() {
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      // Reset form
+      contactForm.reset();
+      successMessage.classList.add('hidden');
+      contactForm.classList.remove('hidden');
+    }, 300);
+  }
+  
+  // Event listeners
+  if (isBrowser) {
+    // Debug: Check if modal elements exist
+    console.log('Modal elements:', {
+      modal: !!modal,
+      modalContent: !!modalContent,
+      backdrop: !!backdrop,
+      closeModal: !!closeModal,
+      cancelBtn: !!cancelBtn,
+      contactForm: !!contactForm,
+      successMessage: !!successMessage,
+      closeSuccess: !!closeSuccess
+    });
+    
+    // Open modal when clicking contact buttons
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[href="#contact"]');
+      if (target) {
+        console.log('Contact button clicked, opening modal...');
+        e.preventDefault();
+        openModal();
+      }
+    });
+    
+    // Close modal events
+    closeModal.addEventListener('click', closeModalFunc);
+    cancelBtn.addEventListener('click', closeModalFunc);
+    closeSuccess.addEventListener('click', closeModalFunc);
+    backdrop.addEventListener('click', closeModalFunc);
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModalFunc();
+      }
+    });
+    
+    // Handle form submission
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(contactForm);
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        subject: formData.get('subject'),
+        message: formData.get('message')
+      };
+      
+      // Here you would typically send the data to your backend
+      // For now, we'll just show the success message
+      console.log('Form submitted:', data);
+      
+      // Show success message
+      contactForm.classList.add('hidden');
+      successMessage.classList.remove('hidden');
+    });
+  }
+</script>
+
+<style>
+  /* Modal animations */
+  #modal-content {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Form focus styles */
+  input:focus, textarea:focus {
+    outline: none;
+  }
+  
+  /* Remove number input arrows */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  /* Custom scrollbar for modal */
+  #contact-modal::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  #contact-modal::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  #contact-modal::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+  }
+  
+  #contact-modal::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.7);
+  }
+</style>
