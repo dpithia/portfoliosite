@@ -4,6 +4,10 @@ const resend = new Resend(process.env.RESEND_API_KEY || 're_test_key');
 
 export async function handler(event, context) {
   try {
+    console.log('Function called with method:', event.httpMethod);
+    console.log('Environment variable check:', process.env.RESEND_API_KEY ? 'Key exists' : 'Key missing');
+    console.log('Key length:', process.env.RESEND_API_KEY ? process.env.RESEND_API_KEY.length : 0);
+    
     // Handle CORS preflight requests
     if (event.httpMethod === 'OPTIONS') {
       return {
@@ -29,6 +33,7 @@ export async function handler(event, context) {
 
     // Check if API key is configured
     if (!process.env.RESEND_API_KEY) {
+      console.log('ERROR: RESEND_API_KEY not found in environment variables');
       return {
         statusCode: 500,
         headers: {
@@ -55,6 +60,11 @@ export async function handler(event, context) {
     }
 
     // Send email
+    console.log('Attempting to send email...');
+    console.log('From: Portfolio Contact <onboarding@resend.dev>');
+    console.log('To: dylan_pithia@hotmail.com');
+    console.log('Subject:', `Portfolio Contact: ${subject}`);
+    
     const { data, error } = await resend.emails.send({
       from: 'Portfolio Contact <onboarding@resend.dev>',
       to: 'dylan_pithia@hotmail.com',
@@ -69,6 +79,8 @@ export async function handler(event, context) {
       `,
     });
 
+    console.log('Resend response:', { data, error });
+
     if (error) {
       console.error('Error sending email:', error);
       return {
@@ -77,7 +89,7 @@ export async function handler(event, context) {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ error: 'Failed to send email' })
+        body: JSON.stringify({ error: 'Failed to send email', details: error.message })
       };
     }
 
