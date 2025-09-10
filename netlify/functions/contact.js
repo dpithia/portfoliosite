@@ -61,12 +61,12 @@ export async function handler(event, context) {
 
     // Send email
     console.log('Attempting to send email...');
-    console.log('From: Portfolio Contact <onboarding@resend.dev>');
+    console.log('From: Portfolio Contact <dpithia97@gmail.com>');
     console.log('To: dylan_pithia@hotmail.com');
     console.log('Subject:', `Portfolio Contact: ${subject}`);
     
     const { data, error } = await resend.emails.send({
-      from: 'Portfolio Contact <onboarding@resend.dev>',
+      from: 'Portfolio Contact <dpithia97@gmail.com>',
       to: 'dylan_pithia@hotmail.com',
       subject: `Portfolio Contact: ${subject}`,
       html: `
