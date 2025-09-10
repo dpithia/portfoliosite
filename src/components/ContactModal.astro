@@ -204,7 +204,7 @@ const isBrowser = typeof window !== 'undefined';
     });
     
     // Handle form submission
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const formData = new FormData(contactForm);
@@ -215,13 +215,40 @@ const isBrowser = typeof window !== 'undefined';
         message: formData.get('message')
       };
       
-      // Here you would typically send the data to your backend
-      // For now, we'll just show the success message
-      console.log('Form submitted:', data);
+      // Show loading state
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
       
-      // Show success message
-      contactForm.classList.add('hidden');
-      successMessage.classList.remove('hidden');
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          // Show success message
+          contactForm.classList.add('hidden');
+          successMessage.classList.remove('hidden');
+          console.log('Email sent successfully:', result);
+        } else {
+          // Show error message
+          alert('Failed to send message: ' + (result.error || 'Unknown error'));
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('Failed to send message. Please try again later.');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
     });
   }
 </script>
