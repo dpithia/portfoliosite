@@ -4,6 +4,19 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      fontWeight: {
+        // Make bold less heavy for a cleaner look
+        bold: '600',
+      },
+      fontSize: {
+        // Slightly smaller display sizes with tighter leading
+        xl: ['1.125rem', { lineHeight: '1.4' }],
+        '2xl': ['1.375rem', { lineHeight: '1.35' }],
+        '3xl': ['1.625rem', { lineHeight: '1.3' }],
+        '4xl': ['1.875rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        '5xl': ['2.25rem', { lineHeight: '1.15', letterSpacing: '-0.015em' }],
+        '6xl': ['2.75rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+      },
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif'],
       },

@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* Slightly smaller rem to make everything more compact */
+    font-size: 15px;
+  }
+
+  body {
+    font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Tighter, cleaner headings by default */
+  h1, h2, h3 {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  h1 { line-height: 1.15; }
+  h2 { line-height: 1.2; }
+  h3 { line-height: 1.25; }
+}
+

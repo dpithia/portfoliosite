@@ -11,7 +11,7 @@ const isBrowser = typeof window !== 'undefined';
   <div class="flex items-center justify-center min-h-screen p-4">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
       <!-- Header -->
-      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
         <h3 class="text-xl font-bold text-gray-900 dark:text-white">Get in Touch</h3>
         <button id="close-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
           <svg class= "w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,8 +21,8 @@ const isBrowser = typeof window !== 'undefined';
       </div>
       
       <!-- Form -->
-      <form id="contact-form" class="p-6">
-        <div class="space-y-4">
+      <form id="contact-form" class="p-5">
+        <div class="space-y-3.5">
           <!-- Name -->
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -33,7 +33,7 @@ const isBrowser = typeof window !== 'undefined';
               id="name" 
               name="name" 
               required
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
               placeholder="Your name"
             />
           </div>
@@ -48,7 +48,7 @@ const isBrowser = typeof window !== 'undefined';
               id="email" 
               name="email" 
               required
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
               placeholder="your.email@example.com"
             />
           </div>
@@ -63,7 +63,7 @@ const isBrowser = typeof window !== 'undefined';
               id="subject" 
               name="subject" 
               required
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
               placeholder="What's this about?"
             />
           </div>
@@ -78,24 +78,24 @@ const isBrowser = typeof window !== 'undefined';
               name="message" 
               rows="4" 
               required
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors resize-none"
               placeholder="Tell me about your project or opportunity..."
             ></textarea>
           </div>
         </div>
         
         <!-- Submit Button -->
-        <div class="mt-6 flex items-center justify-between">
+        <div class="mt-5 flex items-center justify-between">
           <button 
             type="button"
             id="cancel-btn"
-            class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+            class="px-3.5 py-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
           >
             Cancel
           </button>
           <button 
             type="submit"
-            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             Send Message
           </button>
@@ -103,8 +103,8 @@ const isBrowser = typeof window !== 'undefined';
       </form>
       
       <!-- Success Message -->
-      <div id="success-message" class="hidden p-6 text-center">
-        <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div id="success-message" class="hidden p-5 text-center">
+        <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-3">
           <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
           </svg>
@@ -115,7 +115,7 @@ const isBrowser = typeof window !== 'undefined';
         </p>
         <button 
           id="close-success"
-          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
         >
           Close
         </button>
